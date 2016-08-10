@@ -18,7 +18,6 @@
 # limitations under the License.
 #
 
-include_recipe 'nginx::ohai_plugin'
 
 if platform_family?('rhel')
   if node['nginx']['repo_source'] == 'epel'
@@ -36,12 +35,6 @@ if platform_family?('rhel')
 elsif platform_family?('debian')
   include_recipe 'nginx::repo_passenger' if node['nginx']['repo_source'] == 'passenger'
   include_recipe 'nginx::repo'           if node['nginx']['repo_source'] == 'nginx'
-end
-
-package node['nginx']['package_name'] do
-  options package_install_opts
-  notifies :reload, 'ohai[reload_nginx]', :immediately
-  not_if 'which nginx'
 end
 
 service 'nginx' do
